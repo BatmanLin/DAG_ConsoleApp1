@@ -4,7 +4,7 @@ using DAG_ConsoleApp1.Models;
 using System;
 using System.Linq.Expressions;
 
-class Program
+public class Program
 {
     static void Main(string[] args) {
         // Construct the provided graph
