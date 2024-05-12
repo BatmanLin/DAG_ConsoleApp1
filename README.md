@@ -5,6 +5,10 @@
 
 <p id="description">The project DAG_ConsoleApp1 is a task for a job assessment for the Shortest Route Optimizer where the Dijkstra’s Algorithm is used to find the shortest route.</p>
 
+<h2> ❗ Important Update </h2>
+<p> The Solution has two projects: DAG_ConsoleApp1 and DAG_UniTesting Projects.</p> 
+<p> You can either download the TMS.zip or access https://github.com/BatmanLin/DAG_UniTesting for the UniTesting code. </p>
+  
 <h2> 🤔 Problem Understanding</h2>
 
 <p>1. Understand the Dijkstra's Algorithm </p>
