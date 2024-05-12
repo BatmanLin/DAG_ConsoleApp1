@@ -26,19 +26,22 @@
 
 <h2>🛠️ Installation Steps</h2>
 
-<p>1. Build Solution (VS or CLI)</p>
+<p> 1. Download and Open Projects </p>
+
+<p> 2. (Clean) Build the Solution: VS or CLI </p>
 
 ```
-dotnet build
+dotnet build  
 ```
 
-<p>2. Run the Application and Have Fun</p>
+
+<p> 3. Run the Application and Have Fun </p>
 
 ```
 PATH: .\bin\Debug\net8.0\DAG_ConsoleApp1.exe
 ```
 
-<p>3. Try UnitTesting (Or open with .sln file) )</p>
+<p> 4. Try UnitTesting (Or open with .sln file) </p>
 
 ```
 PATH: ..\DAG_UniTesting\UnitTest1
