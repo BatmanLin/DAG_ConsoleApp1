@@ -3,6 +3,7 @@
 using DAG_ConsoleApp1.Models;
 using System;
 using System.Linq.Expressions;
+using System.Xml.Linq;
 
 public class Program
 {
@@ -51,8 +52,9 @@ public class Program
         while (choice != "X") 
         {
             Console.WriteLine("Welcome to play our DAG search console :)");
-            string fromNodeName = GetNodeNameInput("Enter the Starting Node (fromNodeName)");
-            string toNodeName = GetNodeNameInput("Enter the Ending Node (toNodeName)");
+            Console.WriteLine($"The current Nodes' name you can search are: {string.Join(",", graphNode.Select(x => x.NodeName))}");
+            string fromNodeName = GetNodeNameInput("Enter the Starting Node (fromNodeName)", graphNode);
+            string toNodeName = GetNodeNameInput("Enter the Ending Node (toNodeName)", graphNode);
 
             // Find the shortest path with the Dijkstra's Algorithm
             var shortestPathData = ShortestPathData(fromNodeName, toNodeName, graphNode);
@@ -66,11 +68,25 @@ public class Program
 
     public static string GetNodeNameInput(string prompt) {
         Console.WriteLine(prompt);
-        string input;
+        string? input;
         while (true)
         {
             input = Console.ReadLine()?.Trim(); 
             if(!string.IsNullOrEmpty(input) && input.Length == 1) break;
+            Console.WriteLine("Invalid input! Please try again.");
+        }
+        return input;
+    }
+
+    // Overloaded method to restrict user input allign with Nodes' name
+    public static string GetNodeNameInput(string prompt, List<Nodes> graphNode)
+    {
+        Console.WriteLine(prompt);
+        string? input;
+        while (true)
+        {
+            input = Console.ReadLine()?.Trim().ToUpper();
+            if (graphNode.Any(n => n.NodeName.Equals(input, StringComparison.OrdinalIgnoreCase))) break;
             Console.WriteLine("Invalid input! Please try again.");
         }
         return input;
