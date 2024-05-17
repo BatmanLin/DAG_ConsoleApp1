@@ -2,12 +2,43 @@
 
 using DAG_ConsoleApp1.Models;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq.Expressions;
 using System.Xml.Linq;
 
 public class Program
 {
     static void Main(string[] args) {
+
+       var graphNode = graphInitial();
+       MenuCommandService(graphNode); 
+    }
+
+    private static void MenuCommandService(List<Nodes> graphNode)
+    {
+        String choice = GetNodeNameInput("Enter any character to start.");
+        while (choice != "X")
+        {
+            Console.WriteLine("Welcome to play our DAG search console :)");
+            string fromNodeName = GetNodeNameInput("Enter the Starting Node (fromNodeName)");
+            string toNodeName = GetNodeNameInput("Enter the Ending Node (toNodeName)");
+
+            // Find the shortest path with the Dijkstra's Algorithm
+            var shortestPathData = ShortestPathData(fromNodeName, toNodeName, graphNode);
+
+            // Print the result of path and distance to StdOut
+            Console.WriteLine($"The Shortest Path: {string.Join(",", shortestPathData.NodeNames)} with the Distance: {shortestPathData.Distance}");
+            choice = GetNodeNameInput("Please X to exit, or any other character to restart :P");
+        }
+    }
+
+    /// <summary>
+    /// Initial the given Graph
+    /// </summary>
+    /// <returns>the graph</returns>
+    private static List<Nodes> graphInitial()
+    {
         // Construct the provided graph
         var a = new Nodes { NodeName = "A" };
         var b = new Nodes { NodeName = "B" };
@@ -47,51 +78,39 @@ public class Program
 
         // Build the list of graph nodes, and ask users for the from/to Nodes
         var graphNode = new List<Nodes> { a, b, c, d, e, f, g, h, i };
-        
-        String choice = GetNodeNameInput("Enter any character to start.");
-        while (choice != "X") 
-        {
-            Console.WriteLine("Welcome to play our DAG search console :)");
-            Console.WriteLine($"The current Nodes' name you can search are: {string.Join(",", graphNode.Select(x => x.NodeName))}");
-            string fromNodeName = GetNodeNameInput("Enter the Starting Node (fromNodeName)", graphNode);
-            string toNodeName = GetNodeNameInput("Enter the Ending Node (toNodeName)", graphNode);
 
-            // Find the shortest path with the Dijkstra's Algorithm
-            var shortestPathData = ShortestPathData(fromNodeName, toNodeName, graphNode);
-
-            // Print the result of path and distance to StdOut
-            Console.WriteLine($"The Shortest Path: {string.Join(",", shortestPathData.NodeNames)} with the Distance: {shortestPathData.Distance}");
-            choice = GetNodeNameInput("Please X to exit, or any other character to restart :P");
-        }
-        
+        return graphNode;
     }
 
-    public static string GetNodeNameInput(string prompt) {
-        Console.WriteLine(prompt);
-        string? input;
-        while (true)
-        {
-            input = Console.ReadLine()?.Trim(); 
-            if(!string.IsNullOrEmpty(input) && input.Length == 1) break;
-            Console.WriteLine("Invalid input! Please try again.");
-        }
-        return input;
-    }
-
-    // Overloaded method to restrict user input allign with Nodes' name
-    public static string GetNodeNameInput(string prompt, List<Nodes> graphNode)
+    public static string GetNodeNameInput(string prompt, List<Nodes>? graphNode = null)
     {
         Console.WriteLine(prompt);
         string? input;
         while (true)
         {
             input = Console.ReadLine()?.Trim().ToUpper();
-            if (graphNode.Any(n => n.NodeName.Equals(input, StringComparison.OrdinalIgnoreCase))) break;
-            Console.WriteLine("Invalid input! Please try again.");
+
+            if (graphNode == null)
+            {
+                if (!string.IsNullOrEmpty(input) && input.Length == 1) break;
+                Console.WriteLine("Invalid input! Please try again.");
+            }
+            else
+            {
+                if (graphNode.Any(n => n.NodeName.Equals(input, StringComparison.OrdinalIgnoreCase))) break;
+                Console.WriteLine("Invalid input! Please try again.");
+            }
         }
-        return input;
+        return input!;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fromNodeName"></param>
+    /// <param name="toNodeName"></param>
+    /// <param name="graphNode"></param>
+    /// <returns></returns>
     public static ShortestPathData ShortestPathData(string fromNodeName, string toNodeName, List<Nodes> graphNode) 
     {  
         var queue = new List<Nodes>(); // This queue is the nodes in Graph to be process
@@ -137,7 +156,7 @@ public class Program
         while (preDic[endNode] != null)
         {
             endNode = preDic[endNode];
-            shortestPath.Insert(0, endNode.NodeName);
+            shortestPath.Insert(0, endNode!.NodeName);
         }
         return new ShortestPathData { NodeNames = shortestPath, Distance = distance };
 
